@@ -28,8 +28,77 @@ task hello {
 }
 ```
 
-**Running Task**
+**Running a Task**
 
 ```
 gradle hello
+```
+
+## Tasks
+
+Gradle tasks are code that Gradle executes. The language used to write Gradle tasks is [Groovy](https://groovy-lang.org/). A task will have a lifecycle, properties, actions and dependencies. 
+
+
+**Example**
+
+```groovy
+task MyTask {
+    description "This is an example of task"
+    doLast {
+        println "Executing Last in MyTask"
+    }
+    doFirst {
+        println "Executing First in MyTask"
+    }
+}
+```
+
+To see all tasks we can use
+
+```bash
+$ gradle tasks --all
+```
+
+**Phases**
+
+* Initialization Phase - Used to configure multi project builds
+* Configuration phase - Executed code in the task that not the action
+* Execution phase - Execute the task action
+
+**Dependencies**
+
+We can make a task depending on another task. 
+
+```groovy
+task DependencyTask {
+    description "Dependency task"
+    doLast {
+        println "Dependency task"
+    }
+}
+
+task MyTask {
+    description "This is an example of main task"
+    doLast {
+        println "Main task"
+    }
+}
+
+MyTask.dependsOn(DependencyTask)
+```
+
+**Properties**
+
+We can define specific properties to gradle build file, and use them as variables.
+
+```groovy
+ext.projectName = "Testing Gradle"
+def projectVersion = "2.0"
+
+task MyTask {
+    description "Project $projectName"
+    doLast {
+        println "This is an example of task with a property: version $projectVersion"
+    }
+}
 ```
