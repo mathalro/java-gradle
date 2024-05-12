@@ -1,7 +1,17 @@
-apply plugin: 'java'
+// apply plugin: 'java'
 
-task hello {
-    doLast {
-        println "Hello, Gradle"
-    }
+// task hello {
+//     doLast {
+//         println "Hello, Gradle"
+//     }
+// }
+
+task copyConfig (type: Copy) {
+    include 'web.txt'
+    from 'files/src'
+    into 'files/dest'
+    expand (
+        [placeholder: 'Replaced the placeholder']
+    )
+
 }

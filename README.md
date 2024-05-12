@@ -102,3 +102,49 @@ task MyTask {
     }
 }
 ```
+
+## Dependencies
+
+It's possible to specify how we want the dependencies to behave
+
+* mustRunAfter - If two tasks execute, one must run after the other
+* shouldRunAfter - If two taks execvute, one should run after the other. It will ignore circular dependencies.
+* finalizedBy - Inverted dependency. When a task run, it triggers the tasks that specify finalize by it.
+
+## Typed Tasks
+
+For complex and reusable tasks like: copying files, zipping files, etc. 
+
+```groovy
+task copyImages (type: Copy) {
+    from 'img/src/'
+    into 'img/dest/'
+}
+```
+
+**Copy Task**
+
+```groovy
+def contentSpec = copySpec {
+    exclude { it.file.name.startsWith('invalid') }
+    from 'img/src'
+}
+
+task copyImages (type: Copy) {
+    with contentSpec
+    into 'img/dest/'
+}
+```
+
+**Replace content**
+
+```
+task copyConfig (type: Copy) {
+    include 'web.txt'
+    from 'files/src'
+    into 'files/dest'
+    expand (
+        [placeholder: 'Replaced the placeholder']
+    )
+}
+```
